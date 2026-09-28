@@ -1,0 +1,5 @@
+.squares-container{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.55}
+.squares-canvas{width:100%;height:100%;display:block}
+.squares-overlay{position:relative;z-index:1}
+/* allow disabling via a small helper class */
+.squares-disabled{display:none !important}

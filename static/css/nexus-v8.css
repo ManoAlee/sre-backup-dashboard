@@ -1,0 +1,82 @@
+/* Nexus TI V8.0 - Aesthetic Core */
+:root {
+    --bg-deep: #0a0b14;
+    --glass-panel: rgba(20, 24, 35, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --neon-cyan: #00f3ff;
+    --neon-blue: #2d7aff;
+    --neon-alert: #ff2a6d;
+    --neon-success: #05ffa1;
+    --text-main: #e0e6ed;
+    --text-muted: #94a3b8;
+    --font-stack: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+    background-color: var(--bg-deep);
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(45, 122, 255, 0.08) 0%, transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(0, 243, 255, 0.05) 0%, transparent 25%);
+    color: var(--text-main);
+    font-family: var(--font-stack);
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Glassmorphism utilities */
+.glass-panel {
+    background: var(--glass-panel);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-panel:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Layout Grid */
+.nexus-grid {
+    display: grid;
+    grid-template-columns: 280px 1fr 350px;
+    gap: 24px;
+    padding: 24px;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Typography & Decors */
+h1, h2, h3 {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0 0 16px 0;
+}
+
+.glow-text {
+    text-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+}
+
+/* Status Indicators */
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+    box-shadow: 0 0 8px currentColor;
+}
+.status-dot.active { color: var(--neon-success); background: currentColor; }
+.status-dot.error { color: var(--neon-alert); background: currentColor; }
+.status-dot.idle { color: var(--text-muted); background: currentColor; }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }

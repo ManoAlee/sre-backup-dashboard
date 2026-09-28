@@ -1,0 +1,98 @@
+# ==============================================================================
+# SRE Backup & Infrastructure Observability Platform — .gitignore
+# ==============================================================================
+
+# Operating System & IDE Files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Python Artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing & Coverage
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Node & Frontend
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnpm-store/
+frontend/dist/
+frontend/build/
+static/dist/
+.eslintcache
+
+# Sensitive Environment & Secrets
+.env
+.env.local
+.env.*.local
+*.cred
+*.key
+*.pem
+*.crt
+*.pfx
+*.p12
+*.jks
+token.json
+client_secret*.json
+
+# Logs & Database Artifacts
+logs/
+*.log
+*.log.*
+*.sqlite3
+*.db
+counters_history.db
+gunicorn.ctl
+
+# Temporary, Scratch and Dumps
+scratch/
+research/
+*.csv
+*.tsv
+*.sql
+*.tar.gz
+*.zip
+dump/
+dumps/

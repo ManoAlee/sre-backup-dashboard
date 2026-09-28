@@ -1,0 +1,31 @@
+From: Murray S. Kucherawy <msk@trusteddomain.org>
+To: opendmarc-announce@trusteddomain.org, opendmarc-users@trusteddomain.org
+Subject: OpenDMARC v1.4.2 released
+
+The Trusted Domain Project is pleased to announce the availability of
+OpenDMARC v1.4.2 now available for download from GitHub.
+
+This is a bug fix release.  Upgrade is recommended.
+
+The full RELEASE_NOTES for this version, showing changes since the last
+release:
+
+1.4.2		2021/12/19
+	Fix issue #175: Don't reject a multi-valued From when all of the
+		domains match.
+	Fix issue #179: Don't crash when a value in a multi-valued From field
+		is missing a domain name.  Resolves CVE-2021-34555.
+
+Please use the trackers on GitHub at:
+
+https://github.com/trusteddomainproject/OpenDMARC/issues
+
+to file problem reports, or the mailing lists for more general discussion
+and questions.
+
+Older versions of this project used SourceForge and/or Freshmeat, which are
+officially deprecated.  If you had submitted an issue there, please see if
+it is still relevant and consider re-filing it as a GitHub issue.
+
+
+The Trusted Domain Project

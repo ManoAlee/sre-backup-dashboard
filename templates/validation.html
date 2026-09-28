@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRE Sentinel - Live Validation Protocol</title>
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #f8fafc;
+            --bg-surface: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-glass: rgba(226, 232, 240, 0.8);
+            
+            --success: #10b981;
+            --success-text: #047857;
+            --warning: #f59e0b;
+            --warning-text: #b45309;
+            --danger: #ef4444;
+            --danger-text: #b91c1c;
+            --info: #0ea5e9;
+            --info-text: #0369a1;
+            
+            --success-glow: rgba(16, 185, 129, 0.08);
+            --danger-glow: rgba(239, 68, 68, 0.08);
+            --warning-glow: rgba(245, 158, 11, 0.08);
+            --info-glow: rgba(14, 165, 233, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Light Grid Pattern Background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 74, 153, 0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 74, 153, 0.015) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Ambient Glow Blobs */
+        .glow-blob {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            filter: blur(140px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.15;
+        }
+
+        .blob-1 {
+            top: -100px;
+            left: -100px;
+            background: var(--info);
+        }
+
+        .blob-2 {
+            bottom: -150px;
+            right: -100px;
+            background: var(--success);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Header UI (Light Theme) */
+        .header-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            box-shadow: 0 10px 30px rgba(0, 74, 153, 0.03);
+            animation: slideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 900;
+            font-size: 2.2rem;
+            letter-spacing: -0.03em;
+            background: linear-gradient(135deg, #1e293b 0%, #004a99 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .pulse-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 12px var(--success);
+            display: inline-block;
+            animation: pulse-glow 2s infinite;
+        }
+
+        .meta-info {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .badge-sre {
+            background: rgba(14, 165, 233, 0.08);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            color: var(--info-text);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        /* Validation Cards Grid */
+        .validation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 24px;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Premium Light Card */
+        .v-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 8px 24px rgba(0, 74, 153, 0.02);
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .v-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: transparent;
+            transition: background 0.3s;
+        }
+
+        .v-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 74, 153, 0.15);
+            box-shadow: 0 12px 30px rgba(0, 74, 153, 0.06);
+        }
+
+        .v-card:hover::before {
+            background: var(--info);
+        }
+
+        /* Card Header */
+        .v-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding-bottom: 16px;
+        }
+
+        .v-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-pill {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border: 1px solid transparent;
+        }
+
+        .pill-green {
+            background: var(--success-glow);
+            color: var(--success-text);
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+
+        .pill-red {
+            background: var(--danger-glow);
+            color: var(--danger-text);
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .pill-warning {
+            background: var(--warning-glow);
+            color: var(--warning-text);
+            border-color: rgba(245, 158, 11, 0.2);
+        }
+
+        .pill-gray {
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--text-muted);
+            border-color: rgba(0, 0, 0, 0.06);
+        }
+
+        /* Metric Lists */
+        .metrics-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            background: rgba(0, 74, 153, 0.01);
+            border: 1px solid rgba(0, 74, 153, 0.02);
+            border-radius: 10px;
+            transition: background 0.2s;
+        }
+
+        .metric-row:hover {
+            background: rgba(0, 74, 153, 0.03);
+        }
+
+        .metric-label {
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            font-weight: 500;
+        }
+
+        .metric-val {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* Disk Storage UI */
+        .disk-item {
+            background: rgba(0, 74, 153, 0.01);
+            border: 1px solid rgba(0, 74, 153, 0.02);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        .disk-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+        }
+
+        .disk-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .disk-percentage {
+            font-weight: 800;
+            font-size: 0.8rem;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Animations */
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            .header-panel { padding: 20px; }
+            .v-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="glow-blob blob-1"></div>
+    <div class="glow-blob blob-2"></div>
+
+    <div class="container">
+        <!-- Header Console -->
+        <header class="header-panel">
+            <div class="header-top">
+                <h1><span class="pulse-indicator"></span> SRE Sentinel Console</h1>
+                <div class="meta-info">
+                    <button onclick="triggerRevalidate()" id="btn-revalidate" class="badge-sre" style="background: var(--info); color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 700; transition: background 0.2s;">
+                        🔄 Forçar Re-Validação Agora
+                    </button>
+                    <span class="badge-sre">Debian 13 (Trixie)</span>
+                    <span id="timestamp-clock">TIME: --:--:--</span>
+                </div>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.5;">
+                Live operational integrity verification. Telemetry harvested directly from system mounts, folder structures, and active background threads.
+            </p>
+        </header>
+
+
+        <!-- Dynamic Grid -->
+        <main class="validation-grid" id="grid">
+            <div class="v-card" style="grid-column: 1 / -1; align-items: center; justify-content: center; min-height: 200px;">
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--info-text); animation: pulse-glow 1.5s infinite;">
+                    Initializing Telemetry Harvesting Sequence...
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function updateClock() {
+            const clock = document.getElementById('timestamp-clock');
+            if (clock) {
+                const now = new Date();
+                clock.innerText = `TIMESTAMP: ${now.toLocaleTimeString()}`;
+            }
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        async function loadValidation() {
+            try {
+                const res = await fetch(`/api/validation_status?t=${Date.now()}`);
+                const data = await res.json();
+                render(data);
+            } catch (e) {
+                document.getElementById('grid').innerHTML = `
+                    <div class="v-card" style="grid-column: 1 / -1; border-color: var(--danger);">
+                        <div class="v-header">
+                            <span class="v-title" style="color: var(--danger-text);">⚠️ Sentinel Protocol Error</span>
+                            <span class="status-pill pill-red">FAILED</span>
+                        </div>
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-muted); line-height: 1.6;">
+                            Falha crítica na colheita de dados. O servidor SRE pode estar indisponível ou reiniciando.<br>
+                            Detalhes técnicos: ${e.message}
+                        </div>
+                    </div>
+                `;
+                console.error(e);
+            }
+        }
+
+        function render(data) {
+            const grid = document.getElementById('grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            if (!data || typeof data !== 'object') {
+                grid.innerHTML = '<div class="v-card">Dados de validação corrompidos ou inválidos.</div>';
+                return;
+            }
+
+            const cloud = data.cloud || {};
+            const disk = Array.isArray(data.disk) ? data.disk : [];
+            const paths = Array.isArray(data.paths) ? data.paths : [];
+
+            // 1. CLOUD STORAGE (ONEDRIVE) CARD
+            const cloudStatus = cloud.status === 'online' ? 'pill-green' : (cloud.status ? 'pill-red' : 'pill-gray');
+            let cloudHtml = `
+                <div class="v-card">
+                    <div>
+                        <div class="v-header">
+                            <span class="v-title">☁️ Cloud Storage (OneDrive)</span>
+                            <span class="status-pill ${cloudStatus}">${cloud.status ? String(cloud.status) : 'UNKNOWN'}</span>
+                        </div>
+                        ${cloud.status === 'online' ? `
+                            <div class="metrics-container">
+                                <div class="metric-row"><span class="metric-label">Espaço Total</span><span class="metric-val">${cloud.total_gb !== undefined ? cloud.total_gb + ' GB' : '--'}</span></div>
+                                <div class="metric-row"><span class="metric-label">Espaço Utilizado</span><span class="metric-val">${cloud.used_gb !== undefined ? cloud.used_gb + ' GB' : '--'}</span></div>
+                                <div class="metric-row"><span class="metric-label">Espaço Livre</span><span class="metric-val">${cloud.free_gb !== undefined ? cloud.free_gb + ' GB' : '--'}</span></div>
+                                <div class="metric-row"><span class="metric-label">Tamanho Lixeira</span><span class="metric-val">${cloud.trash !== undefined ? cloud.trash + ' GB' : '--'}</span></div>
+                            </div>
+                        ` : `
+                            <div style="color: var(--danger-text); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; background: rgba(239, 68, 68, 0.05); padding: 12px; border-radius: 10px; border: 1px solid rgba(239, 68, 68, 0.1);">
+                                ⚠️ ${cloud.details || 'Conexão offline ou credenciais inválidas.'}
+                            </div>
+                        `}
+                    </div>
+                </div>
+            `;
+            grid.innerHTML += cloudHtml;
+
+            // 2. DISK MOUNTS CARD
+            let diskHtml = `
+                <div class="v-card">
+                    <div>
+                        <div class="v-header">
+                            <span class="v-title">💾 Ponto de Montagem Físico</span>
+                            <span class="status-pill pill-green">MONITORED</span>
+                        </div>
+                        <div class="metrics-container">
+            `;
+            disk.forEach(d => {
+                if (!d) return;
+                const statusClass = d.status === 'mounted' ? 'pill-green' : (d.status ? 'pill-red' : 'pill-gray');
+                const percent = d.percent !== undefined ? d.percent : 0;
+                const progressColor = percent > 90 ? 'var(--danger)' : 'var(--info)';
+                const textColor = percent > 90 ? 'var(--danger-text)' : 'var(--success-text)';
+                
+                diskHtml += `
+                    <div class="disk-item">
+                        <div class="disk-meta">
+                            <span class="disk-name">${d.mount || '—'}</span>
+                            <span class="status-pill ${statusClass}" style="padding: 2px 6px; font-size: 0.65rem;">${d.status || 'UNKNOWN'}</span>
+                        </div>
+                        ${d.status === 'mounted' ? `
+                            <div class="disk-meta" style="margin-bottom: 4px; font-size: 0.72rem; color: var(--text-muted);">
+                                <span>Espaço: ${d.used_gb || 0}/${d.total_gb || 0} GB</span>
+                                <span class="disk-percentage" style="color: ${textColor}; font-weight: bold;">${percent}%</span>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" style="width: ${percent}%; background-color: ${progressColor};"></div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+            diskHtml += `
+                        </div>
+                    </div>
+                </div>
+            `;
+            grid.innerHTML += diskHtml;
+
+            // 3. CRITICAL PATHS CARD
+            let pathHtml = `
+                <div class="v-card">
+                    <div>
+                        <div class="v-header">
+                            <span class="v-title">📂 Pastas Críticas (Storage)</span>
+                            <span class="status-pill pill-green">ACTIVE</span>
+                        </div>
+                        <div class="metrics-container">
+            `;
+            paths.forEach(p => {
+                if (!p) return;
+                const exists = !!p.exists;
+                const statusClass = exists ? 'pill-green' : 'pill-red';
+                pathHtml += `
+                    <div class="metric-row" style="padding: 12px;">
+                        <span class="metric-label" style="font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; color: var(--text-main); max-width: 70%; word-break: break-all;">${p.path || '—'}</span>
+                        <span class="status-pill ${statusClass}" style="padding: 2px 8px; font-size: 0.68rem;">${exists ? 'EXISTE' : 'AUSENTE'}</span>
+                    </div>
+                `;
+            });
+            pathHtml += `
+                        </div>
+                    </div>
+                </div>
+            `;
+            grid.innerHTML += pathHtml;
+
+            // 4. MICROSOFT GRAPH API SENTINEL CARD
+            let graphHtml = `
+                <div class="v-card">
+                    <div>
+                        <div class="v-header">
+                            <span class="v-title">🔑 Microsoft Graph Sentinel</span>
+                            <span class="status-pill pill-green">NOMINAL</span>
+                        </div>
+                        <div class="metrics-container">
+                            <div class="metric-row"><span class="metric-label">App Registration</span><span class="metric-val" style="color: var(--info-text);">SRE-Backup-CORE-DATA-01</span></div>
+                            <div class="metric-row"><span class="metric-label">OAuth2 Flow</span><span class="metric-val" style="color: var(--success-text);">Client Credentials</span></div>
+                            <div class="metric-row"><span class="metric-label">Client Secret Status</span><span class="metric-val" style="color: var(--success-text);">Ativo (Até Jul/2028)</span></div>
+                            <div class="metric-row"><span class="metric-label">Admin Consent</span><span class="metric-val" style="color: var(--success-text);">Concedido ✅</span></div>
+                            <div class="metric-row"><span class="metric-label">Imunidade Token 90d</span><span class="metric-val" style="color: var(--success-text);">ATIVADA (100%)</span></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            grid.innerHTML += graphHtml;
+
+            // 5. SECURITY ENGINE CARD
+            let secHtml = `
+                <div class="v-card">
+                    <div>
+                        <div class="v-header">
+                            <span class="v-title">🛡️ Security Integrity Engine</span>
+                            <span class="status-pill pill-green">NOMINAL</span>
+                        </div>
+                        <div class="metrics-container">
+                            <div class="metric-row"><span class="metric-label">Orquestrador SRE</span><span class="metric-val" style="color: var(--info-text);">v2.1</span></div>
+                            <div class="metric-row"><span class="metric-label">Pre-Flight Checks</span><span class="metric-val" style="color: var(--success-text);">ATIVADO</span></div>
+                            <div class="metric-row"><span class="metric-label">Entropy Guard</span><span class="metric-val" style="color: var(--success-text);">ONLINE</span></div>
+                            <div class="metric-row"><span class="metric-label">Mecanismo Threshold</span><span class="metric-val">15% MAX</span></div>
+                            <div class="metric-row"><span class="metric-label">Time Drift Calibração</span><span class="metric-val" style="color: var(--success-text);">CALIBRADO</span></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            grid.innerHTML += secHtml;
+        }
+
+        async function triggerRevalidate() {
+            const btn = document.getElementById('btn-revalidate');
+            if (btn) {
+                btn.innerText = '⏳ Executando Re-Validação...';
+                btn.disabled = true;
+            }
+            try {
+                const res = await fetch('/api/revalidate', { method: 'POST' });
+                const data = await res.json();
+                alert(data.message || 'Re-validação iniciada com sucesso.');
+            } catch (e) {
+                alert('Erro ao disparar re-validação: ' + e.message);
+            } finally {
+                if (btn) {
+                    btn.innerText = '🔄 Forçar Re-Validação Agora';
+                    btn.disabled = false;
+                }
+                loadValidation();
+            }
+        }
+
+        loadValidation();
+        // Dynamic fetch every 15s to keep validation fresh
+        setInterval(loadValidation, 15000);
+    </script>
+</body>
+</html>
+

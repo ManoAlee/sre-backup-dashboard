@@ -1,0 +1,14 @@
+#!/bin/sh
+#
+# 
+# simple/simple signing speed test with and without Lua
+
+if [ x"$srcdir" = x"" ]
+then
+	srcdir=`pwd`
+fi
+
+echo ===== signing without Lua
+../../miltertest/miltertest $MILTERTESTFLAGS -u -s $srcdir/t-lua-speed-nolua.lua
+echo ===== signing with Lua
+../../miltertest/miltertest $MILTERTESTFLAGS -u -s $srcdir/t-lua-speed-lua.lua

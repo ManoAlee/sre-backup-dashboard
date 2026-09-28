@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  sre-dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sre-backup-dashboard
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      # Read-only mount of system logs for telemetry inspection
+      - ./logs:/app/logs:ro
+      - /var/log:/var/log:ro
+    environment:
+      - FLASK_ENV=production
+      - PORT=5000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - sre-network
+
+networks:
+  sre-network:
+    driver: bridge

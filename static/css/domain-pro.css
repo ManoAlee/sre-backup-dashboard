@@ -1,0 +1,253 @@
+/* 
+   SRE Domain Sentinel - Technical HUD v14 
+   Design: Neo-Brutalist SRE Console (High Contrast, Sharp Borders, Monospace Data)
+*/
+
+:root {
+    --accent-success: #10b981;
+    --accent-warning: #f59e0b;
+    --accent-danger: #ef4444;
+    --accent-info: #3b82f6;
+    --bg-card: #ffffff;
+    --border-dark: #1e293b;
+    --border-light: #e2e8f0;
+}
+
+.domain-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 28px;
+    padding: 10px 0;
+}
+
+.premium-card {
+    background: var(--bg-card);
+    border: 2px solid var(--border-dark);
+    border-radius: 4px; /* Sharp technical edges */
+    padding: 24px;
+    box-shadow: 4px 4px 0px 0px var(--border-dark);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.premium-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 8px 8px 0px 0px var(--border-dark);
+}
+
+/* Score progress bar on the card top edge */
+.premium-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 4px;
+    width: var(--score, 100%);
+    background: linear-gradient(90deg, var(--accent-danger) 0%, var(--accent-warning) 50%, var(--accent-success) 100%);
+}
+
+.health-score-circle {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.4rem;
+    font-weight: 800;
+    background: conic-gradient(var(--score-color, var(--accent-success)) var(--score), #f1f5f9 0);
+    position: relative;
+    border: 2px solid var(--border-dark);
+}
+
+.health-score-circle::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    background: white;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.health-score-circle span {
+    position: relative;
+    z-index: 2;
+    color: var(--border-dark);
+}
+
+.identity-suite {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.suite-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    background: #f8fafc;
+    border: 2px solid var(--border-light);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #475569;
+}
+
+.suite-item ion-icon {
+    font-size: 1.3rem;
+    margin-bottom: 2px;
+}
+
+.suite-item.active {
+    color: #0f766e;
+    background: #f0fdfa;
+    border-color: #0d9488;
+}
+
+.suite-item.active-warn {
+    color: #b45309;
+    background: #fffbeb;
+    border-color: #d97706;
+}
+
+.suite-item.inactive {
+    color: #94a3b8;
+    background: #f8fafc;
+    border-color: var(--border-light);
+    opacity: 0.6;
+}
+
+.suite-item:hover {
+    transform: scale(1.05);
+    border-color: var(--border-dark);
+}
+
+.blacklist-alert {
+    background: #fef2f2;
+    border: 2px solid var(--accent-danger);
+    border-radius: 4px;
+    color: #b91c1c;
+    padding: 14px;
+    margin-top: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    box-shadow: 2px 2px 0px 0px var(--accent-danger);
+}
+
+.blacklist-alert ion-icon {
+    font-size: 1.4rem;
+}
+
+.blacklist-dossier {
+    background: #0f172a;
+    border: 2px solid #334155;
+    border-radius: 4px;
+    padding: 16px;
+    color: #cbd5e1;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    box-shadow: 3px 3px 0px 0px #1e293b;
+}
+
+.dossier-item {
+    padding-bottom: 12px;
+    border-bottom: 1px solid #1e293b;
+    margin-bottom: 12px;
+}
+
+.dossier-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.btn-tech {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: #004a99;
+    color: white;
+    border: 2px solid #1e293b;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 4px;
+    box-shadow: 3px 3px 0px 0px #1e293b;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-tech:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 5px 5px 0px 0px #1e293b;
+    background: #005cc3;
+}
+
+.btn-tech:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0px 0px 0px 0px #1e293b;
+}
+
+.governance-guide {
+    margin-top: 40px;
+    padding: 28px;
+    background: #0f172a;
+    border: 2px solid var(--border-dark);
+    color: #f8fafc;
+    border-radius: 4px;
+    box-shadow: 6px 6px 0px 0px var(--border-dark);
+}
+
+.guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.guide-item {
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+}
+
+.guide-item h4 {
+    color: #8bc53f;
+    margin-bottom: 8px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    font-family: 'Outfit', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.guide-item p {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    line-height: 1.5;
+}
+
+/* Animations */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

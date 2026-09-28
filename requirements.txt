@@ -1,0 +1,5 @@
+Flask>=2.0
+psutil
+gunicorn>=20.0
+requests
+dnspython

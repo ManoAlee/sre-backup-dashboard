@@ -1,0 +1,21 @@
+[Unit]
+Description=SRE Backup Dashboard 2026
+After=network.target network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=sre.engineer
+WorkingDirectory=/scripts/SRE_Dashboard_2026
+ExecStart=/scripts/SRE_Dashboard_2026/.venv/bin/python3 -m gunicorn -w 3 -b 0.0.0.0:7001 --timeout 300 app:app
+Restart=on-failure
+RestartSec=5s
+Environment="ABUSEIPDB_API_KEY=2feb06e0b2b6bbd0180e32d0510ae432cb3b2d17d75b621b5bc6a006bc6f8b21c790a10fad6f47f6"
+
+# Security hardening
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=read-only
+
+[Install]
+WantedBy=multi-user.target

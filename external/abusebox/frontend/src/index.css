@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --surface-bg: #f3f4f6;
+  --card-border: #e5e7eb;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  background: var(--surface-bg);
+  color: #111827;
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+}
+
+.landing {
+  background:
+    radial-gradient(circle at 8% 12%, rgba(34, 211, 238, 0.24), transparent 32%),
+    radial-gradient(circle at 80% 78%, rgba(52, 211, 153, 0.22), transparent 30%),
+    linear-gradient(130deg, #020617, #111827 52%, #0b1324);
+}
+
+code,
+pre {
+  font-family: "JetBrains Mono", monospace;
+}

@@ -1,0 +1,160 @@
+[
+  {
+    "domain": "enterprise.local",
+    "ip": "192.185.213.201",
+    "type": "domain",
+    "provider": "HostGator (Web/DNS)",
+    "mail_provider": "Microsoft 365 (Exchange Online)",
+    "web_provider": "HostGator Brasil (Web Site)",
+    "dns_authority": "HostGator DNS (ns58/ns59)",
+    "score": 90,
+    "blacklists": [],
+    "ssl": {
+      "status": "ok",
+      "days_left": 49,
+      "issuer": "YR2",
+      "protocol": "TLSv1.3",
+      "fallback": true
+    },
+    "security": {
+      "spf": "ok",
+      "dmarc": "ok",
+      "dmarc_policy": "none",
+      "dkim": "ok",
+      "spf_alignment": "mismatch",
+      "spf_record": "v=spf1 include:_spf.rdstation.com.br include:sendgrid.net include:spf.protection.outlook.com ~all",
+      "spf_lookups": 5,
+      "dmarc_record": "v=DMARC1;p=none;sp=none;adkim=r;aspf=r;pct=100;fo=0;rf=afrf;ri=86400;rua=mailto:postmaster@enterprise.local;ruf=mailto:postmaster@enterprise.local",
+      "dkim_selector": "default"
+    },
+    "expiration": {
+      "status": "ok",
+      "days": 609,
+      "date": "30/05/2028"
+    },
+    "mx": {
+      "status": "ok",
+      "servers": [
+        {
+          "host": "enterprise-com-br.mail.protection.outlook.com",
+          "pref": 0
+        }
+      ]
+    },
+    "dnssec": {
+      "enabled": false
+    },
+    "bimi": {
+      "enabled": false
+    },
+    "whois": {
+      "domain": "enterprise.local",
+      "whois_server": "whois.registro.br",
+      "name_servers": [
+        "ns58.hostgator.com.br",
+        "ns59.hostgator.com.br"
+      ],
+      "status": [
+        "published"
+      ]
+    },
+    "abuseipdb": {
+      "error": "AbuseIPDB rate limit exceeded. Try again later."
+    },
+    "last_check": "2026-09-28T16:10:30.849187+00:00"
+  },
+  {
+    "domain": "partner_alpha.com.br",
+    "ip": "108.167.151.98",
+    "type": "domain",
+    "provider": "HostGator (Web/DNS)",
+    "mail_provider": "Microsoft 365 (Exchange Online)",
+    "web_provider": "HostGator Brasil (Web Site)",
+    "dns_authority": "HostGator DNS (ns1058/ns1059)",
+    "score": 90,
+    "blacklists": [],
+    "ssl": {
+      "status": "ok",
+      "days_left": 49,
+      "issuer": "YR2",
+      "protocol": "TLSv1.3",
+      "fallback": true
+    },
+    "security": {
+      "spf": "ok",
+      "dmarc": "ok",
+      "dmarc_policy": "none",
+      "dkim": "ok",
+      "spf_alignment": "mismatch",
+      "spf_record": "v=spf1 include:spf.protection.outlook.com ~all",
+      "spf_lookups": 1,
+      "dmarc_record": "v=DMARC1;p=none;sp=none;adkim=r;aspf=r;pct=100;fo=0;rf=afrf;ri=86400;rua=mailto:postmaster@partner_alpha.com.br;ruf=mailto:postmaster@partner_alpha.com.br",
+      "dkim_selector": "default"
+    },
+    "expiration": {
+      "status": "ok",
+      "days": 1020,
+      "date": "15/07/2029"
+    },
+    "mx": {
+      "status": "ok",
+      "servers": [
+        {
+          "host": "partner_alpha-com-br.mail.protection.outlook.com",
+          "pref": 0
+        }
+      ]
+    },
+    "dnssec": {
+      "enabled": false
+    },
+    "bimi": {
+      "enabled": false
+    },
+    "whois": {
+      "domain": "partner_alpha.com.br",
+      "whois_server": "whois.registro.br",
+      "name_servers": [
+        "ns1058.hostgator.com.br",
+        "ns1059.hostgator.com.br"
+      ],
+      "status": [
+        "published"
+      ]
+    },
+    "abuseipdb": {
+      "error": "AbuseIPDB rate limit exceeded. Try again later."
+    },
+    "last_check": "2026-09-28T16:10:30.849211+00:00"
+  },
+  {
+    "domain": "Vivo Fibra Corporativa (Link Principal)",
+    "ip": "152.250.240.115",
+    "type": "infra_ip",
+    "provider": "Vivo Fibra Corporativa (Link Principal)",
+    "role": "primary",
+    "latency": "0.390ms",
+    "ports": "80:UP | 443:DOWN | 22:DOWN",
+    "score": 100,
+    "blacklists": [],
+    "abuseipdb": {
+      "error": "AbuseIPDB rate limit exceeded. Try again later."
+    },
+    "last_check": "2026-09-28T16:10:30.849221+00:00"
+  },
+  {
+    "domain": "Digital Play Telecom (Link Redundante)",
+    "ip": "131.196.236.189",
+    "type": "infra_ip",
+    "provider": "Digital Play Telecom (Link Redundante)",
+    "role": "failover",
+    "latency": "Standby (ICMP Drop)",
+    "ports": "80:DOWN | 443:DOWN | 22:DOWN",
+    "score": 100,
+    "blacklists": [],
+    "abuseipdb": {
+      "error": "AbuseIPDB rate limit exceeded. Try again later."
+    },
+    "last_check": "2026-09-28T16:10:30.849229+00:00"
+  }
+]

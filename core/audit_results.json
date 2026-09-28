@@ -1,0 +1,89 @@
+[
+  {
+    "target": "enterprise.local",
+    "type": "domain",
+    "ip": "192.185.213.201",
+    "score": 60,
+    "blacklists": [
+      {
+        "bl": "dnsbl-3.uceprotect.net",
+        "code": "127.0.0.2"
+      }
+    ],
+    "ssl": {
+      "status": "ok",
+      "days_left": 47,
+      "issuer": "R13",
+      "protocol": "TLSv1.3"
+    },
+    "smtp": {
+      "status": "ok",
+      "mx": "mail.enterprise.local",
+      "banner": "220-br58.hostgator.com.br ESMTP Exim 4.99.2 #2 Tue, 05 May 2026 16:34:00 -0300 \r\n220-We do not authorize the use of this system to transport unsolicited, \r\n220 and/or bulk e-mail.",
+      "port_25": "open"
+    },
+    "security": {
+      "spf": "ok",
+      "dmarc": "ok",
+      "dmarc_policy": "none",
+      "dkim": "missing",
+      "spf_record": "v=spf1 +mx +a +ip4:192.185.176.170 +include:websitewelcome.com +include:_spf.rdstation.com.br +include:sendgrid.net ~all",
+      "dmarc_record": "v=DMARC1;p=none;sp=none;adkim=r;aspf=r;pct=100;fo=0;rf=afrf;ri=86400;rua=mailto:postmaster@enterprise.local;ruf=mailto:postmaster@enterprise.local"
+    },
+    "expiration": {
+      "status": "ok",
+      "days": 755,
+      "date": "2028-05-30T12:00:00Z"
+    },
+    "timestamp": "2026-05-05T16:34:00.265413"
+  },
+  {
+    "target": "partner_alpha.com.br",
+    "type": "domain",
+    "ip": "108.167.151.98",
+    "score": 90,
+    "blacklists": [],
+    "ssl": {
+      "status": "ok",
+      "days_left": 59,
+      "issuer": "R13",
+      "protocol": "TLSv1.3"
+    },
+    "smtp": {
+      "status": "ok",
+      "mx": "mail.partner_alpha.com.br",
+      "banner": "220-br1058.hostgator.com.br ESMTP Exim 4.99.2 #2 Tue, 05 May 2026 16:34:02 -0300 \r\n220-We do not authorize the use of this system to transport unsolicited, \r\n220 and/or bulk e-mail.",
+      "port_25": "open"
+    },
+    "security": {
+      "spf": "ok",
+      "dmarc": "ok",
+      "dmarc_policy": "none",
+      "dkim": "missing",
+      "spf_record": "v=spf1 +mx +a +ip4:108.167.151.98 +include:websitewelcome.com ~all",
+      "dmarc_record": "v=DMARC1;p=none;sp=none;adkim=r;aspf=r;pct=100;fo=0;rf=afrf;ri=86400;rua=mailto:postmaster@partner_alpha.com.br;ruf=mailto:postmaster@partner_alpha.com.br"
+    },
+    "expiration": {
+      "status": "ok",
+      "days": 1166,
+      "date": "2029-07-15T12:15:45Z"
+    },
+    "timestamp": "2026-05-05T16:34:02.644044"
+  },
+  {
+    "target": "152.250.240.115",
+    "type": "ip",
+    "provider": "Vivo (Link Local)",
+    "score": 100,
+    "blacklists": [],
+    "timestamp": "2026-05-05T16:34:04.759242"
+  },
+  {
+    "target": "131.196.236.189",
+    "type": "ip",
+    "provider": "Digital Play (Link Local)",
+    "score": 100,
+    "blacklists": [],
+    "timestamp": "2026-05-05T16:34:06.871436"
+  }
+]

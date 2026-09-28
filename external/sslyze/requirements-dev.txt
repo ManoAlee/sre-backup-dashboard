@@ -1,0 +1,13 @@
+mypy==1.14
+ruff==0.8.4
+invoke>=2,<3
+pytest>=8,<9
+sphinx
+sphinx-rtd-theme
+twine>=4,<5
+sphinx-autodoc-typehints
+pytest-cov
+faker
+
+# For building the Windows executable; cx-freeze is not compatible with Python 3.12 yet
+cx-freeze==6.15.15; sys.platform == 'win32' and python_version < '3.12'
